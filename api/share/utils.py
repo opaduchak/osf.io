@@ -2,15 +2,14 @@
 
 SHARE/Trove accepts metadata records as "indexcards" in turtle format: https://www.w3.org/TR/turtle/
 """
-from functools import partial
 import logging
 import random
-from urllib.parse import urljoin
 import uuid
+from functools import partial
+from urllib.parse import urljoin
 
-from celery.exceptions import Retry
-from django.apps import apps
 import requests
+from django.apps import apps
 
 from framework.celery_tasks import app as celery_app
 from framework.celery_tasks.handlers import enqueue_task
@@ -19,7 +18,6 @@ from framework.sentry import log_exception
 from osf import models as osf_db
 from osf.metadata.tools import pls_gather_metadata_file
 from website import settings
-
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +67,7 @@ def _enqueue_update_share(osfresource):
         enqueue_task(async_update_resource_share.s(_osfguid_value))
 
 
-@celery_app.task(bind=True, max_retries=4, acks_late=True)
+@celery_app.task(bind=True, max_retries=4)
 def task__update_share(self, guid: str, is_backfill=False):
     """
     This function updates share  takes Preprints, Projects and Registrations.
@@ -84,13 +82,13 @@ def task__update_share(self, guid: str, is_backfill=False):
         if self.request.retries == self.max_retries:
             log_exception(e)
         elif resp.status_code >= 500:
-            try:
-                self.retry(
-                    exc=e,
-                    countdown=(random.random() + 1) * min(60 + settings.CELERY_RETRY_BACKOFF_BASE ** self.request.retries, 60 * 10),
-                )
-            except Retry as e:  # Retry is only raise after > 5 retries
-                log_exception(e)
+            # try:
+            self.retry(
+                exc=e,
+                countdown=(random.random() + 1) * min(60 + settings.CELERY_RETRY_BACKOFF_BASE ** self.request.retries, 60 * 10),
+            )
+            # except Retry as e:  # Retry is only raise after > 5 retries
+            #     log_exception(e)
         else:
             log_exception(e)
 
@@ -563,13 +561,13 @@ def async_update_resource_share(self, guid, old_subjects=None):
         if self.request.retries == self.max_retries:
             log_exception(e)
         elif resp.status_code >= 500:
-            try:
-                self.retry(
-                    exc=e,
-                    countdown=(random.random() + 1) * min(60 + settings.CELERY_RETRY_BACKOFF_BASE ** self.request.retries, 60 * 10),
-                )
-            except Retry as e:  # Retry is only raise after > 5 retries
-                log_exception(e)
+            # try:
+            self.retry(
+                exc=e,
+                countdown=(random.random() + 1) * min(60 + settings.CELERY_RETRY_BACKOFF_BASE ** self.request.retries, 60 * 10),
+            )
+            # except Retry as e:  # Retry is only raise after > 5 retries
+            #     log_exception(e)
         else:
             log_exception(e)
 

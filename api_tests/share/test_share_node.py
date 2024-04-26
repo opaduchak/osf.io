@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 import responses
-
+from celery.contrib.testing.worker import start_worker
 from osf.models import CollectionSubmission, SpamStatus, Outcome
 from osf.utils.outcomes import ArtifactTypes
 
@@ -18,7 +18,7 @@ from osf_tests.factories import (
 
 from website import settings
 from website.project.tasks import on_node_updated
-
+from framework.celery_tasks import app as celery_app
 from framework.auth.core import Auth
 from api.share.utils import shtrove_ingest_url, sharev2_push_url
 from ._utils import expect_ingest_request
@@ -28,10 +28,16 @@ from ._utils import expect_ingest_request
 @pytest.mark.enable_enqueue_task
 class TestNodeShare:
 
+    @pytest.mark.django_db
+    @pytest.fixture(autouse=True)
+    def worker(self, transactional_db, ):
+        with start_worker(celery_app, perform_ping_check=False):
+            yield
+
     @pytest.fixture(scope='class', autouse=True)
     def _patches(self):
         with patch('osf.models.identifiers.IdentifierMixin.request_identifier_update'):
-            with patch.object(settings, 'USE_CELERY', False):
+            with patch.object(settings, 'USE_CELERY', True):
                 yield
 
     @pytest.fixture()

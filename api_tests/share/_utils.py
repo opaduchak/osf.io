@@ -22,7 +22,7 @@ def mock_share_responses():
     '''
     with mock.patch.object(website_settings, 'SHARE_ENABLED', True):
         with mock.patch.object(website_settings, 'SHARE_API_TOKEN', 'mock-api-token'):
-            with mock.patch.object(website_settings, 'USE_CELERY', False):  # run tasks synchronously
+            with mock.patch.object(website_settings, 'USE_CELERY', True):  # run tasks synchronously
                 with responses.RequestsMock(assert_all_requests_are_fired=False) as _rsps:
                     _ingest_url = shtrove_ingest_url()
                     _rsps.add(responses.POST, _ingest_url, status=200)

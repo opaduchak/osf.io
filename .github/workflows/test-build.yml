@@ -36,6 +36,10 @@ jobs:
     permissions:
       checks: write
     services:
+      rabbitmq:
+        image: "rabbitmq:3.12.13-alpine"
+        ports:
+          - 5672
       postgres:
         image: postgres
         env:
@@ -83,6 +87,10 @@ jobs:
     permissions:
       checks: write
     services:
+      rabbitmq:
+        image: "rabbitmq:3.12.13-alpine"
+        ports:
+          - 5672
       postgres:
         image: postgres
 
@@ -131,6 +139,10 @@ jobs:
     permissions:
       checks: write
     services:
+      rabbitmq:
+        image: "rabbitmq:3.12.13-alpine"
+        ports:
+          - 5672
       postgres:
         image: postgres
 
@@ -182,6 +194,10 @@ jobs:
     permissions:
       checks: write
     services:
+      rabbitmq:
+        image: "rabbitmq:3.12.13-alpine"
+        ports:
+          - 5672
       postgres:
         image: postgres
 
@@ -230,6 +246,10 @@ jobs:
       checks: write
     needs: build-cache
     services:
+      rabbitmq:
+        image: "rabbitmq:3.12.13-alpine"
+        ports:
+          - 5672
       postgres:
         image: postgres
 

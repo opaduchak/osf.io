@@ -65,7 +65,7 @@ def _enqueue_task(signature):
         not has_app_context() and
         getattr(api_globals, 'request', None) is None
     ):  # Not in a request context
-        signature.apply()
+        signature.apply_async()
     else:
         if signature not in queue():
             queue().append(signature)
