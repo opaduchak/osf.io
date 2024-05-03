@@ -21,6 +21,9 @@ def strip_html(unclean: str | bytes, tags: set[str] = None):
     :return: stripped string
     :rtype: str
     """
+    if not unclean:
+        return unclean
+
     if isinstance(unclean, bytes):
         unclean = unclean.decode()
 
