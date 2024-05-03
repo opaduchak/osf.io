@@ -264,7 +264,7 @@ def find_title_description_help_example(rs, question):
 
     """
     title = question.get('title', '')
-    description = strip_html(question.get('description', ''))
+    description = strip_html(question.get('description') or '')
     help = strip_html(question.get('help', ''))
     example = strip_html(question.get('example', ''))
 
