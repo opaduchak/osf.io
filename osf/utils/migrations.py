@@ -263,10 +263,10 @@ def find_title_description_help_example(rs, question):
     :returns tuple, title, description, help, example strings
 
     """
-    title = question.get('title', '')
-    description = strip_html(question.get('description') or '')
-    help = strip_html(question.get('help', ''))
-    example = strip_html(question.get('example', ''))
+    title = question.get('title', '') or ''
+    description = strip_html(question.get('description')) or ''
+    help = strip_html(question.get('help')) or ''
+    example = strip_html(question.get('example')) or ''
 
     schema_name = rs.schema.get('name', '')
     # Descriptions that contain any of these keywords

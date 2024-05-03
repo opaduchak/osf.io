@@ -10,7 +10,7 @@ def is_iterable(obj):
 
 def is_iterable_but_not_string(obj):
     """Return True if ``obj`` is an iterable object that isn't a string."""
-    return is_iterable(obj) and not hasattr(obj, 'strip')
+    return is_iterable(obj) and not isinstance(obj, str)
 
 
 def strip_html(unclean: str | bytes, tags: set[str] = None):
