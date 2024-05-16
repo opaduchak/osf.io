@@ -1,1 +1,1 @@
-pymongo==4.6.3
+pymongo[ocsp]==3.12.3
