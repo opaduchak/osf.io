@@ -165,9 +165,14 @@ class EphemeralNodeSettings:
     @property
     def _id(self):
         return self.gv_id
+
     @property
     def has_auth(self):
         return True
+
+    @property
+    def added_default(self):
+        return False
 
     @property
     def complete(self):
